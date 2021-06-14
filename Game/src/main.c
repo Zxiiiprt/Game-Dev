@@ -52,8 +52,10 @@ int initialize_window(void) {
 // Function to poll SDL events and process our game (keyboard) input
 void process_input(void) {
 	SDL_Event event; //The SDL event is not a pointer, just a regular struct
-	// SDL will Poll everything - reads all the inputs/events that are happening
-	SDL_PollEvent(&event); //Pass the reference to (address of) the event as the parameter
+
+	/**SDL will Poll everything - reads all the inputs/events that are happening
+	 * Pass the reference to (address of) the event as the parameter**/
+	SDL_PollEvent(&event);
 
 	// Check the type of event to see what was polled
 	switch(event.type) {
@@ -65,13 +67,11 @@ void process_input(void) {
 		case SDL_KEYDOWN:
 			// Inside the event struct we have the key, and inside the key we have the key symbol, inside which we have the actual symbol
 			if(event.key.keysym.sym == SDLK_ESCAPE) game_is_running = FALSE; //If we press the ESC key, game loop quits
-            
             // Set paddle velocities based on left/right arrow keys
 			if(event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d) paddle.vel_x = 300;
             else if(event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a) paddle.vel_x = -300;
             break;
         case SDL_KEYUP:
-            
             // Reset paddle velocities based on left/right arrow keys
             if(event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d) {
                 paddle.vel_x = 0;
@@ -105,32 +105,34 @@ void setup(void) {
 
 // Update function with a fixed time step
 void update(void) {
-	// Implement logic to keep a fixed timestep - Only update at the rate of FPS
-	    // We need to waste some time/sleep until we reach the frame target tim
-	    // SDL_TICKS_PASSED takes in 2 parameters and compares the current time passed with target time
-        // Sleep until we reach the target frame time in ms
-	        //while(!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
-        // However, using this while loop above is CPU intensive
-        // We can use better methods
+	/**Implement logic to keep a fixed timestep - Only update at the rate of FPS
+	 * We need to waste some time/sleep until we reach the frame target time
+	 * SDL_TICKS_PASSED takes in 2 parameters and compares the current time passed with target time
+	 * Sleep until we reach the target frame time in ms
+	 * 		while(!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
+	 * However, using this while loop above is CPU intensive
+	 * We can use better methods**/
+
     // Calculate how much time we have to wait until we reach the target time frame    
     int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - last_frame_time);
 
     // Call the delay ONLY if we're too fast to process/update this frame
     if(time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME) SDL_Delay(time_to_wait);
 
-    // Delta Time is the difference between the current time and the last time of the last frame in seconds
-    // Get the delta_time in seconds and update our objects
+    /**Delta Time is the difference between the current time and the last time of the last frame in seconds
+	 * Get the delta_time in seconds and update our objects**/
     float delta_time = (SDL_GetTicks() - last_frame_time)/1000.0f;
 
-    // Store the milliseconds of the current frame to be used in the next one
-	// As soon as we call SDL_Init, it keeps track of these ticks in ms
+    /**Store the milliseconds of the current frame to be used in the next one
+	 * As soon as we call SDL_Init, it keeps track of these ticks in ms**/
 	last_frame_time = SDL_GetTicks();
 
-	// Basic Movement Logic in pixels per second (this is where we use our delta_time factor)
-    // this ensures that we're moving exactly the number of pixels specified in a second
-    // irrespective of our computers clock speed - and independant of the FPS
-	    //rectangle.x += 70*delta_time; //Increment pixels to the RIGHT in the x direction per second
-	    //rectangle.y += 50*delta_time; //Increment pixels DOWN in the y direction per second
+	/**Basic Movement Logic in pixels per second (this is where we use our delta_time factor)
+	 * this ensures that we're moving exactly the number of pixels specified in a second
+	 * irrespective of our computers clock speed - and independant of the FPS
+	 * 		rectangle.x += 70*delta_time; //Increment pixels to the RIGHT in the x direction per second
+	 * 		rectangle.y += 50*delta_time; //Increment pixels DOWN in the y direction per second
+	 * **/
     
     // Update ball position based on its velocity
     ball.x += ball.vel_x*delta_time;
@@ -138,7 +140,7 @@ void update(void) {
 
     // Update paddle position based on its velocity
     paddle.x += paddle.vel_x*delta_time;
-    //paddle.y += paddle.vel_y*delta_time;
+    //paddle.y += paddle.vel_y*delta_time; - unecessary: paddle doesn't need to move in the y direction
     
     // TODO: Check for ball collision with the walls
 
