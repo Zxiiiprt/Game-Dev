@@ -3,7 +3,7 @@
 This is a simple Pong game written in C, created using the SDL2 Library for handling renders on different OS's such as Windows/MacOS/Linux.
 
 The more time I spent programming, the more I realized that I had a keen interest in wanting to understand what goes on under the hood.
-This motivated me to figure out writing a game in C (at the time, writing on in Assembly didn't even cross my mind).
+This motivated me to figure out writing a game in C (at the time, writing one in Assembly didn't even cross my mind).
 
 However, the deeper I stare into the abyss, alas the abyss stares back at me lol.
 
